@@ -34,4 +34,10 @@ public class OrderService(IOrderRepository orderRepository, IAssetService assetS
                       ?? throw new OrderNotFoundException(orderId);
         return new OrderResponse(order);
     }
+
+    public async Task<IEnumerable<OrderResponse>> GetOrdersAsync(int page, int size, CancellationToken cancellationToken)
+    {
+        IEnumerable<Order> orders = await _orderRepository.GetOrdersAsync(page, size, cancellationToken);
+        return orders.Select(order => new OrderResponse(order));
+    }
 }

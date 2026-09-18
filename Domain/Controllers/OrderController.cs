@@ -31,4 +31,11 @@ public class OrderController(IOrderService orderService, IValidator<OrderRequest
         OrderResponse response = await _orderService.GetOrderAsync(orderId, cancellationToken);
         return Ok(response);
     }
+
+    [HttpGet]
+    public async Task<IEnumerable<OrderResponse>> GetOrdersAsync(int page, int size, CancellationToken cancellationToken)
+    {
+        IEnumerable<OrderResponse> orders = await _orderService.GetOrdersAsync(page, size, cancellationToken);
+        return orders;
+    }
 }

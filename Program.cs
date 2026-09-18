@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using TradeStream.Domain.Interfaces;
 using TradeStream.Domain.Services;
@@ -10,7 +11,8 @@ using FluentValidation;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(
+    options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
     
 builder.Services.AddValidatorsFromAssemblyContaining<OrderRequestValidator>();
 

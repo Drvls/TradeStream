@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using TradeStream.Domain.Entities;
 using TradeStream.Domain.Interfaces;
 using TradeStream.Infra.Database;
@@ -19,5 +20,12 @@ public class OrderRepository(TradeDbContext tradeDbContext) : IOrderRepository
     {
         Order? order = await _tradeDbContext.Orders.FindAsync(orderId, cancellationToken);
         return order;
+    }
+
+    public async Task<IEnumerable<Order>> GetOrdersAsync(int page, int size, CancellationToken cancellationToken)
+    {
+        IEnumerable<Order> orders = await _tradeDbContext.Orders
+            .Skip((page - 1) * size).Take(size).ToListAsync(cancellationToken);
+        return orders;
     }
 }

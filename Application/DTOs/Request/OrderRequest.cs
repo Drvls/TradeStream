@@ -1,3 +1,5 @@
+using TradeStream.Domain.Enum;
+
 namespace TradeStream.Application.DTOs.Request;
 
 public record OrderRequest
@@ -6,5 +8,5 @@ public record OrderRequest
     public Guid UserId { get; init; }
     public decimal TargetValue { get; init; }
     public int Quantity { get; init; }
-    
+    public OrderType OrderType { get; init; }
 }

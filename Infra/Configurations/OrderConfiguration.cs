@@ -19,5 +19,6 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
             .HasForeignKey(o => o.UserId);
         builder.Property(o => o.TargetValue).IsRequired().HasPrecision(18, 2);
         builder.Property(o => o.Quantity).IsRequired().HasColumnType("int");
+        builder.Property(o => o.OrderType).IsRequired().HasConversion<string>().HasMaxLength(5);
     }
 }

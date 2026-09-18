@@ -12,11 +12,13 @@ public class Order
     public Guid UserId { get; set; } = default;
     public decimal TargetValue { get; set; } = default;
     public int Quantity { get; set; } = default;
+    public OrderType OrderType { get; set; }
 
     // Navigation property
     public User User { get; set; } 
     
-    public Order(DateTime orderDate, string assetCode, string assetName, Guid userId, decimal targetValue, int quantity)
+    public Order(DateTime orderDate, string assetCode, string assetName, 
+        Guid userId, decimal targetValue, int quantity, OrderType orderType)
     {
         OrderDate = orderDate;
         Status = OrderStatus.Pending;
@@ -25,5 +27,6 @@ public class Order
         UserId = userId;
         TargetValue = targetValue;
         Quantity = quantity;
+        OrderType = orderType;
     }
 }

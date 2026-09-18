@@ -20,5 +20,7 @@ public class OrderRequestValidator : AbstractValidator<OrderRequest>
         RuleFor(x => x.Quantity)
             .NotEmpty().WithMessage("Quantity is required")
             .GreaterThan(0).WithMessage("Quantity must be greater than 0");
+        RuleFor(order => order.OrderType)
+            .NotEmpty().WithMessage("OrderType is required");
     }
 }

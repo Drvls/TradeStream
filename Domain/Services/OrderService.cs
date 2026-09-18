@@ -20,7 +20,8 @@ public class OrderService(IOrderRepository orderRepository, IAssetService assetS
             assetResponse.Asset.Name,
             order.UserId,
             order.TargetValue,
-            order.Quantity
+            order.Quantity,
+            order.OrderType
             );
 
         return new OrderResponse(await _orderRepository.AddOrderAsync(newOrder, cancellationToken));

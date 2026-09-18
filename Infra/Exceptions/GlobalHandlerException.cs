@@ -18,9 +18,20 @@ public class GlobalHandlerException : IExceptionHandler
                         StatusCode = StatusCodes.Status404NotFound,
                         Error = "Asset not found",
                         Message = exception.Message
-                    }
-                );
+                    }, cancellationToken: cancellationToken);
                 
+                break;
+            
+            case OrderNotFoundException:
+                httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                httpContext.Response.WriteAsJsonAsync(
+                    new ErrorResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Error = "Order not found",
+                        Message = exception.Message
+                    }, cancellationToken: cancellationToken
+                );
                 break;
             
             default:

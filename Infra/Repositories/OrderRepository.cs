@@ -14,4 +14,10 @@ public class OrderRepository(TradeDbContext tradeDbContext) : IOrderRepository
         await _tradeDbContext.SaveChangesAsync(cancellationToken);
         return order;
     }
+
+    public async Task<Order?> GetOrderAsync(Guid orderId, CancellationToken cancellationToken)
+    {
+        Order? order = await _tradeDbContext.Orders.FindAsync(orderId, cancellationToken);
+        return order;
+    }
 }

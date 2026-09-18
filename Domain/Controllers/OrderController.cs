@@ -24,4 +24,11 @@ public class OrderController(IOrderService orderService, IValidator<OrderRequest
         OrderResponse response = await _orderService.CreateOrderAsync(request, cancellationToken);
         return Created($"/users/{response.Order.UserId}/orders/{response.Order.Id}", response);
     }
+
+    [HttpGet("{orderId:guid}")]
+    public async Task<IActionResult> GetOrder(Guid orderId, CancellationToken cancellationToken)
+    {
+        OrderResponse response = await _orderService.GetOrderAsync(orderId, cancellationToken);
+        return Ok(response);
+    }
 }

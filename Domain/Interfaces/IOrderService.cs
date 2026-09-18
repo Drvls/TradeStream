@@ -6,4 +6,5 @@ namespace TradeStream.Domain.Interfaces;
 public interface IOrderService
 {
     Task<OrderResponse> CreateOrderAsync(OrderRequest order, CancellationToken cancellationToken);
+    Task<OrderResponse> GetOrderAsync(Guid orderId, CancellationToken cancellationToken);
 }

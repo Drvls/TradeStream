@@ -33,9 +33,16 @@ public class OrderController(IOrderService orderService, IValidator<OrderRequest
     }
 
     [HttpGet]
-    public async Task<IEnumerable<OrderResponse>> GetOrdersAsync(int page, int size, CancellationToken cancellationToken)
+    public async Task<IEnumerable<OrderResponse>> GetOrders(int page, int size, CancellationToken cancellationToken)
     {
         IEnumerable<OrderResponse> orders = await _orderService.GetOrdersAsync(page, size, cancellationToken);
         return orders;
+    }
+
+    [HttpPatch("{orderId:guid}")]
+    public async Task<IActionResult> CancelOrder(Guid orderId, CancellationToken cancellationToken)
+    {
+        OrderResponse order = await _orderService.CancelOrderAsync(orderId, cancellationToken);
+        return Ok(order);
     }
 }

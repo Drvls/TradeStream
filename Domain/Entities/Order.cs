@@ -29,4 +29,9 @@ public class Order
         Quantity = quantity;
         OrderType = orderType;
     }
+
+    public void Cancel()
+    {
+        Status = OrderStatus.Cancelled;
+    }
 }

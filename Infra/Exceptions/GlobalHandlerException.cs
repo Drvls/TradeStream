@@ -18,8 +18,8 @@ public class GlobalHandlerException : IExceptionHandler
                         StatusCode = StatusCodes.Status404NotFound,
                         Error = "Asset not found",
                         Message = exception.Message
-                    }, cancellationToken: cancellationToken);
-                
+                    }, cancellationToken
+                    );
                 break;
             
             case OrderNotFoundException:
@@ -30,7 +30,43 @@ public class GlobalHandlerException : IExceptionHandler
                         StatusCode = StatusCodes.Status404NotFound,
                         Error = "Order not found",
                         Message = exception.Message
-                    }, cancellationToken: cancellationToken
+                    }, cancellationToken
+                );
+                break;
+            
+            case OrderAlreadyExecutedException:
+                httpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+                httpContext.Response.WriteAsJsonAsync(
+                    new ErrorResponse
+                    {
+                        StatusCode = StatusCodes.Status409Conflict,
+                        Error = "Order already executed",
+                        Message = exception.Message
+                    }, cancellationToken
+                );
+                break;
+            
+            case OrderAlreadyRejectedException:
+                httpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+                httpContext.Response.WriteAsJsonAsync(
+                    new ErrorResponse
+                    {
+                        StatusCode = StatusCodes.Status409Conflict,
+                        Error = "Order already rejected",
+                        Message = exception.Message
+                    }, cancellationToken
+                );
+                break;
+            
+            case OrderAlreadyCancelledException:
+                httpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+                httpContext.Response.WriteAsJsonAsync(
+                    new ErrorResponse
+                    {
+                        StatusCode = StatusCodes.Status409Conflict,
+                        Error = "Order already cancelled",
+                        Message = exception.Message
+                    }, cancellationToken
                 );
                 break;
             

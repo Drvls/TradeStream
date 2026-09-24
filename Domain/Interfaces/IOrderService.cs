@@ -9,4 +9,5 @@ public interface IOrderService
     Task<OrderResponse> CreateOrderAsync(OrderRequest order, CancellationToken cancellationToken);
     Task<OrderResponse> GetOrderAsync(Guid orderId, CancellationToken cancellationToken);
     Task<IEnumerable<OrderResponse>> GetOrdersAsync(int page, int size, CancellationToken cancellationToken);
+    Task<OrderResponse> CancelOrderAsync(Guid orderId, CancellationToken cancellationToken);
 }

@@ -1,6 +1,7 @@
 using TradeStream.Application.DTOs.Request;
 using TradeStream.Application.DTOs.Response;
 using TradeStream.Domain.Entities;
+using TradeStream.Domain.Enum;
 using TradeStream.Domain.Exceptions;
 using TradeStream.Domain.Interfaces;
 
@@ -39,5 +40,27 @@ public class OrderService(IOrderRepository orderRepository, IAssetService assetS
     {
         IEnumerable<Order> orders = await _orderRepository.GetOrdersAsync(page, size, cancellationToken);
         return orders.Select(order => new OrderResponse(order));
+    }
+
+    public async Task<OrderResponse> CancelOrderAsync(Guid id, CancellationToken cancellationToken)
+    {
+        Order? order = await _orderRepository.GetOrderAsync(id, cancellationToken) ??  throw new OrderNotFoundException(id);
+        switch (order.Status) {
+            case OrderStatus.Cancelled:
+                throw new OrderAlreadyCancelledException(id);
+                break;
+            case OrderStatus.Executed:
+                throw new OrderAlreadyExecutedException(id);
+                break;
+            case OrderStatus.Rejected:
+                throw new OrderAlreadyRejectedException(id);
+                break;
+            default:
+                order.Cancel();
+                break;
+        }
+
+        Order? updatedOrder = await _orderRepository.UpdateOrderStatusAsync(order, cancellationToken);
+        return new OrderResponse(updatedOrder);
     }
 }

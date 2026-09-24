@@ -8,7 +8,7 @@ public class OrderRequestValidator : AbstractValidator<OrderRequest>
     public OrderRequestValidator() {
         RuleFor(x => x.AssetCode)
             .NotEmpty().WithMessage("Asset code is required")
-            .Length(5).WithMessage("Asset code must be 5 digits");
+            .MaximumLength(6).WithMessage("Asset Code must not exceed 6 characters");
 
         RuleFor(x => x.UserId)
             .NotEmpty().WithMessage("UserID is required");

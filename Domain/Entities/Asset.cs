@@ -8,4 +8,12 @@ public class Asset
     public decimal Price { get; set; } = 0;
     public List<decimal> PriceHistory { get; set; } = [];
     public int Quantity { get; set; } = 0;
+
+    public Asset(string code, string name, decimal price, int quantity)
+    {
+        Code = code;
+        Name = name;
+        Price = price;
+        Quantity = quantity;
+    }
 }

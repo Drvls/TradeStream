@@ -14,4 +14,11 @@ public class AssetRepository(TradeDbContext tradeDbContext) : IAssetRepository
         Asset? asset = await _tradeDbContext.Assets.FirstOrDefaultAsync(x => x.Code == code, cancellationToken);
         return asset;
     }
+
+    public async Task<Asset?> AddAssetAsync(Asset asset, CancellationToken cancellationToken)
+    {
+        _tradeDbContext.Assets.Add(asset);
+        await _tradeDbContext.SaveChangesAsync(cancellationToken);
+        return asset;
+    }
 }

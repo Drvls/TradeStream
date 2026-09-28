@@ -39,4 +39,10 @@ public class AssetService(IAssetRepository assetRepository) : IAssetService
         
         return new AssetResponse(await _assetRepository.UpdateAssetAsync(asset, cancellationToken));
     }
+
+    public async Task<IEnumerable<AssetResponse>> GetAssetsAsync(int page, int size, CancellationToken cancellationToken)
+    {
+        IEnumerable<Asset> assets = await _assetRepository.GetAssetsAsync(page, size, cancellationToken);
+        return assets.Select(asset => new AssetResponse(asset));
+    }
 }

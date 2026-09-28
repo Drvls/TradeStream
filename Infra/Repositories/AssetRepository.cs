@@ -34,4 +34,10 @@ public class AssetRepository(TradeDbContext tradeDbContext) : IAssetRepository
         await _tradeDbContext.SaveChangesAsync(cancellationToken);
         return asset;
     }
+
+    public async Task<IEnumerable<Asset>> GetAssetsAsync(int page, int size, CancellationToken cancellationToken) {
+        IEnumerable<Asset> tasks = await _tradeDbContext.Assets
+            .Skip((page -1) * size).Take(size).ToListAsync(cancellationToken);
+        return tasks;
+    }
 }

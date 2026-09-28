@@ -28,10 +28,16 @@ public class AssetController(
         return Created($"assets/{response.Asset.AssetId}", response);
     }
     
-    [HttpGet]
+    [HttpGet("{code}")]
     public async Task<IActionResult> GetAsset(string code, CancellationToken cancellationToken) {
         AssetResponse response = await _assetService.GetAssetByCodeAsync(code, cancellationToken);
         return Ok(response);
+    }
+
+    [HttpGet]
+    public async Task<IEnumerable<AssetResponse>> GetAssetsAsync(int page, int size, CancellationToken cancellationToken) {
+        IEnumerable<AssetResponse> assets = await _assetService.GetAssetsAsync(page, size, cancellationToken);
+        return assets;
     }
 
     [HttpPatch]

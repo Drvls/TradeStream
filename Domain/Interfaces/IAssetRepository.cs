@@ -8,4 +8,5 @@ public interface IAssetRepository
     Task<Asset?> FindAssetByIdAsync(Guid id, CancellationToken cancellationToken);
     Task<Asset?> AddAssetAsync(Asset asset, CancellationToken cancellationToken);
     Task<Asset?> UpdateAssetAsync(Asset asset, CancellationToken cancellationToken);
+    Task<IEnumerable<Asset>> GetAssetsAsync(int page, int size, CancellationToken cancellationToken);
 }

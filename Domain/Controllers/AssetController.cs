@@ -27,6 +27,12 @@ public class AssetController(
         AssetResponse response = await _assetService.CreateAssetAsync(request, cancellationToken);
         return Created($"assets/{response.Asset.AssetId}", response);
     }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetAsset(string code, CancellationToken cancellationToken) {
+        AssetResponse response = await _assetService.GetAssetByCodeAsync(code, cancellationToken);
+        return Ok(response);
+    }
 
     [HttpPatch]
     public async Task<IActionResult> UpdateAssetCode(Guid id, AssetPatchRequest request, CancellationToken cancellationToken)

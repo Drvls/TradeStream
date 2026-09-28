@@ -16,4 +16,25 @@ public class Asset
         Price = price;
         Quantity = quantity;
     }
+
+    public void ChangeCode(string code)
+    {
+        Code = code;
+    }
+
+    public void ChangeName(string name)
+    {
+        Name = name;
+    }
+
+    public void ChangePrice(decimal price)
+    {
+        Price = price;
+        PriceHistory.Add(price);
+    }
+
+    public void ChangeQuantity(int quantity)
+    {
+        Quantity = quantity;
+    }
 }

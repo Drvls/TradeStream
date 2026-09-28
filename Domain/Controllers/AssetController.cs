@@ -9,10 +9,14 @@ namespace TradeStream.Domain.Controllers;
 
 [ApiController]
 [Route("tradestream/[controller]")]
-public class AssetController(IAssetService assetService, IValidator<AssetRequest> validator) : ControllerBase
+public class AssetController(
+    IAssetService assetService, 
+    IValidator<AssetRequest> validator, 
+    IValidator<AssetPatchRequest> patchValidator) : ControllerBase
 {
     private readonly IAssetService _assetService = assetService;
     private readonly IValidator<AssetRequest> _assetRequestValidator = validator;
+    private readonly IValidator<AssetPatchRequest> _patchValidator = patchValidator;
 
     [HttpPost]
     public async Task<IActionResult> CreateAsset(AssetRequest request, CancellationToken cancellationToken)
@@ -22,5 +26,15 @@ public class AssetController(IAssetService assetService, IValidator<AssetRequest
 
         AssetResponse response = await _assetService.CreateAssetAsync(request, cancellationToken);
         return Created($"assets/{response.Asset.AssetId}", response);
+    }
+
+    [HttpPatch]
+    public async Task<IActionResult> UpdateAssetCode(Guid id, AssetPatchRequest request, CancellationToken cancellationToken)
+    {
+        ValidationResult validation = await _patchValidator.ValidateAsync(request, cancellationToken);
+        if (!validation.IsValid) return BadRequest(validation.Errors);
+        
+        AssetResponse response = await _assetService.UpdateAssetAsync(id, request, cancellationToken);
+        return Ok(response);
     }
 }

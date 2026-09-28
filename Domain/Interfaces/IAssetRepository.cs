@@ -4,6 +4,8 @@ namespace TradeStream.Domain.Interfaces;
 
 public interface IAssetRepository
 {
-    Task<Asset?> FindByCodeAsync(string code, CancellationToken cancellationToken);
+    Task<Asset?> GetAssetByCodeAsync(string code, CancellationToken cancellationToken);
+    Task<Asset?> FindAssetByIdAsync(Guid id, CancellationToken cancellationToken);
     Task<Asset?> AddAssetAsync(Asset asset, CancellationToken cancellationToken);
+    Task<Asset?> UpdateAssetAsync(Asset asset, CancellationToken cancellationToken);
 }

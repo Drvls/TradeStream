@@ -12,7 +12,7 @@ public class AssetService(IAssetRepository assetRepository) : IAssetService
 
     public async Task<AssetResponse> GetAssetByCodeAsync(string code, CancellationToken cancellationToken)
     {
-        Asset asset = await _assetRepository.FindByCodeAsync(code, cancellationToken) ?? throw new AssetNotFoundException(code);
+        Asset asset = await _assetRepository.GetAssetByCodeAsync(code, cancellationToken) ?? throw new AssetNotFoundException(code);
         return new AssetResponse(asset);
     }
 
@@ -27,5 +27,16 @@ public class AssetService(IAssetRepository assetRepository) : IAssetService
         
         asset.PriceHistory.Add(request.Price);
         return new AssetResponse(await _assetRepository.AddAssetAsync(asset, cancellationToken));
+    }
+
+    public async Task<AssetResponse> UpdateAssetAsync(Guid id, AssetPatchRequest request, CancellationToken cancellationToken)
+    {
+        Asset asset = await _assetRepository.FindAssetByIdAsync(id, cancellationToken) ?? throw new AssetNotFoundException(id);
+        if(request.Code is not null) asset.ChangeCode(request.Code);
+        if(request.Name is not null) asset.ChangeName(request.Name);
+        if(request.Price is not null) asset.ChangePrice(request.Price.Value);
+        if(request.Quantity is not null) asset.ChangeQuantity(request.Quantity.Value);
+        
+        return new AssetResponse(await _assetRepository.UpdateAssetAsync(asset, cancellationToken));
     }
 }

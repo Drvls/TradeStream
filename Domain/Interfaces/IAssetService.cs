@@ -7,4 +7,5 @@ public interface IAssetService
 {
     Task<AssetResponse> GetAssetByCodeAsync(string code, CancellationToken cancellationToken);
     Task<AssetResponse> CreateAssetAsync(AssetRequest request, CancellationToken cancellationToken);
+    Task<AssetResponse> UpdateAssetAsync(Guid id, AssetPatchRequest request, CancellationToken cancellationToken);
 }

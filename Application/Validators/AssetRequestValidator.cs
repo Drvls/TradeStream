@@ -9,11 +9,13 @@ public class AssetRequestValidator : AbstractValidator<AssetRequest>
     {
         RuleFor(x => x.Code)
             .NotEmpty().WithMessage("Asset Code is required")
-            .MaximumLength(6).WithMessage("Asset Code must not exceed 6 characters");
-        
+            .MaximumLength(6).WithMessage("Asset Code must not exceed 6 characters")
+            .MinimumLength(3).WithMessage("Asset Code must contain at least 3 characters");
+
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Asset Name is required")
-            .MaximumLength(50).WithMessage("Asset Name must not exceed 50 characters");
+            .MaximumLength(50).WithMessage("Asset Name must not exceed 50 characters")
+            .MinimumLength(1).WithMessage("Asset Name must contain at least 1 character");
         
         RuleFor(x => x.Price)
             .NotEmpty().WithMessage("Asset Price is required")

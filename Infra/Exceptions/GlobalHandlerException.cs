@@ -6,13 +6,13 @@ namespace TradeStream.Infra.Exceptions;
 
 public class GlobalHandlerException : IExceptionHandler
 {
-    public ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
+    public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
         switch (exception)
         {
             case AssetNotFoundException:
                 httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-                httpContext.Response.WriteAsJsonAsync(
+                await httpContext.Response.WriteAsJsonAsync(
                     new ErrorResponse
                     {
                         StatusCode = StatusCodes.Status404NotFound,
@@ -24,7 +24,7 @@ public class GlobalHandlerException : IExceptionHandler
             
             case OrderNotFoundException:
                 httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-                httpContext.Response.WriteAsJsonAsync(
+                await httpContext.Response.WriteAsJsonAsync(
                     new ErrorResponse
                     {
                         StatusCode = StatusCodes.Status404NotFound,
@@ -36,7 +36,7 @@ public class GlobalHandlerException : IExceptionHandler
             
             case OrderAlreadyExecutedException:
                 httpContext.Response.StatusCode = StatusCodes.Status409Conflict;
-                httpContext.Response.WriteAsJsonAsync(
+                await httpContext.Response.WriteAsJsonAsync(
                     new ErrorResponse
                     {
                         StatusCode = StatusCodes.Status409Conflict,
@@ -48,7 +48,7 @@ public class GlobalHandlerException : IExceptionHandler
             
             case OrderAlreadyRejectedException:
                 httpContext.Response.StatusCode = StatusCodes.Status409Conflict;
-                httpContext.Response.WriteAsJsonAsync(
+                await httpContext.Response.WriteAsJsonAsync(
                     new ErrorResponse
                     {
                         StatusCode = StatusCodes.Status409Conflict,
@@ -60,7 +60,7 @@ public class GlobalHandlerException : IExceptionHandler
             
             case OrderAlreadyCancelledException:
                 httpContext.Response.StatusCode = StatusCodes.Status409Conflict;
-                httpContext.Response.WriteAsJsonAsync(
+                await httpContext.Response.WriteAsJsonAsync(
                     new ErrorResponse
                     {
                         StatusCode = StatusCodes.Status409Conflict,
@@ -75,6 +75,6 @@ public class GlobalHandlerException : IExceptionHandler
                 break;
         }
         
-        return ValueTask.FromResult(true);
+        return await ValueTask.FromResult(true);
     }
 }

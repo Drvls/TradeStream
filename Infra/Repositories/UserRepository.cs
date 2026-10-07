@@ -19,4 +19,11 @@ public class UserRepository(TradeDbContext context) : IUserRepository{
         User? user = await _context.Users.FindAsync(id, cancellationToken);
         return user;
     }
+
+    public async Task<User> UpdateUserBalanceAsync(User user, CancellationToken cancellationToken)
+    {
+         _context.Users.Update(user);
+         await _context.SaveChangesAsync(cancellationToken);
+         return user;
+    }
 }

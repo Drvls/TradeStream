@@ -19,4 +19,12 @@ public class UserService(IUserRepository userRepository) : IUserService{
         User user = await _userRepository.GetUserAsync(id, cancellationToken) ?? throw new UserNotFoundException(id);
         return new UserResponse(user);
     }
+
+    public async Task<UserResponse> DepositUserBalanceAsync(Guid userId, decimal amount, CancellationToken cancellationToken)
+    {
+        User user = await _userRepository.GetUserAsync(userId, cancellationToken) ??
+                    throw new UserNotFoundException(userId);
+        user.Deposit(amount);
+        return new UserResponse(await _userRepository.UpdateUserBalanceAsync(user, cancellationToken));
+    }
 }

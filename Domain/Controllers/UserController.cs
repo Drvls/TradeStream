@@ -22,4 +22,11 @@ public class UserController(IUserService userService) : ControllerBase{
         UserResponse response = await _userService.GetUserAsync(id, cancellationToken);
         return Ok(response);
     }
+
+    [HttpPatch]
+    public async Task<IActionResult> DepositUserBalance(Guid id, decimal amount, CancellationToken cancellationToken)
+    {
+        UserResponse response = await _userService.DepositUserBalanceAsync(id, amount, cancellationToken);
+        return Ok(response);
+    }
 }

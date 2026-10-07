@@ -15,4 +15,11 @@ public class UserController(IUserService userService) : ControllerBase{
         UserResponse response = await _userService.CreateUserAsync(cancellationToken);
         return Created($"/users/{response.User.Id}", response);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetUser(Guid id, CancellationToken cancellationToken)
+    {
+        UserResponse response = await _userService.GetUserAsync(id, cancellationToken);
+        return Ok(response);
+    }
 }

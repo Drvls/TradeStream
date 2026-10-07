@@ -70,6 +70,18 @@ public class GlobalHandlerException : IExceptionHandler
                 );
                 break;
             
+            case UserNotFoundException:
+                httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                await httpContext.Response.WriteAsJsonAsync(
+                    new ErrorResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Error = "User not found",
+                        Message = exception.Message
+                    }, cancellationToken
+                );
+                break;
+            
             default:
                 httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 await httpContext.Response.WriteAsJsonAsync(

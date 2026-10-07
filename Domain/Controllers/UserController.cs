@@ -23,10 +23,17 @@ public class UserController(IUserService userService) : ControllerBase{
         return Ok(response);
     }
 
-    [HttpPatch]
+    [HttpPatch("Deposit")]
     public async Task<IActionResult> DepositUserBalance(Guid id, decimal amount, CancellationToken cancellationToken)
     {
         UserResponse response = await _userService.DepositUserBalanceAsync(id, amount, cancellationToken);
+        return Ok(response);
+    }
+    
+    [HttpPatch("Withdraw")]
+    public async Task<IActionResult> WithdrawUserBalance(Guid id, decimal amount, CancellationToken cancellationToken)
+    {
+        UserResponse response = await _userService.WithdrawUserBalanceAsync(id, amount, cancellationToken);
         return Ok(response);
     }
 }

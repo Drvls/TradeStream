@@ -2,7 +2,7 @@ namespace TradeStream.Domain.Entities;
 
 public class User
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; init; } = Guid.NewGuid();
     public decimal Balance { get; private set; }
     public List<Position> Positions { get; set; } = [];
     public List<Order> Orders { get; set; } = [];

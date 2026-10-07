@@ -72,6 +72,14 @@ public class GlobalHandlerException : IExceptionHandler
             
             default:
                 httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                await httpContext.Response.WriteAsJsonAsync(
+                    new ErrorResponse
+                    {
+                        StatusCode = StatusCodes.Status500InternalServerError,
+                        Error = "Internal Server Error",
+                        Message = exception.Message
+                    }, cancellationToken
+                );
                 break;
         }
         

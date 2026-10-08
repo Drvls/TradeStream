@@ -26,4 +26,10 @@ public class UserRepository(TradeDbContext context) : IUserRepository{
          await _context.SaveChangesAsync(cancellationToken);
          return user;
     }
+
+    public async Task UpdateUserActivityStatusAsync(User user, CancellationToken cancellationToken)
+    {
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
 }

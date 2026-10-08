@@ -8,4 +8,6 @@ public interface IUserService
     Task<UserResponse> GetUserAsync(Guid id, CancellationToken cancellationToken);
     Task<UserResponse> DepositUserBalanceAsync(Guid userId, decimal amount, CancellationToken cancellationToken);
     Task<UserResponse> WithdrawUserBalanceAsync(Guid userId, decimal amount, CancellationToken cancellationToken);
+    Task DisableUserAsync(Guid userId, CancellationToken cancellationToken);
+    Task EnableUserAsync(Guid userId, CancellationToken cancellationToken);
 }

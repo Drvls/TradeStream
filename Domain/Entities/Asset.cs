@@ -8,6 +8,7 @@ public class Asset
     public decimal Price { get; set; } = 0;
     public List<decimal> PriceHistory { get; set; } = [];
     public int Quantity { get; set; } = 0;
+    public bool IsActive { get; set; } = true;
 
     public Asset(string code, string name, decimal price, int quantity)
     {
@@ -36,5 +37,15 @@ public class Asset
     public void ChangeQuantity(int quantity)
     {
         Quantity = quantity;
+    }
+    
+    public void Enable()
+    {
+        IsActive = true;
+    }
+
+    public void Disable()
+    {
+        IsActive = false;
     }
 }

@@ -9,4 +9,6 @@ public interface IAssetService
     Task<AssetResponse> CreateAssetAsync(AssetRequest request, CancellationToken cancellationToken);
     Task<AssetResponse> UpdateAssetAsync(Guid id, AssetPatchRequest request, CancellationToken cancellationToken);
     Task<IEnumerable<AssetResponse>> GetAssetsAsync(int page, int size, CancellationToken cancellationToken);
+    Task DisableAssetAsync(Guid assetId, CancellationToken cancellationToken);
+    Task EnableAssetAsync(Guid assetId, CancellationToken cancellationToken);
 }

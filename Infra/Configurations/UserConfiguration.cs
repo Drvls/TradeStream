@@ -17,5 +17,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasMany(u => u.Orders)
             .WithOne(o => o.User)
             .HasForeignKey(o => o.UserId);
+        builder.Property(u => u.IsActive)
+            .HasDefaultValue(true).IsRequired();
     }
 }

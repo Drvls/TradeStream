@@ -13,7 +13,7 @@ public class UserController(IUserService userService) : ControllerBase{
     public async Task<IActionResult> CreateUser(CancellationToken cancellationToken)
     {
         UserResponse response = await _userService.CreateUserAsync(cancellationToken);
-        return Created($"/users/{response.User.Id}", response);
+        return Created($"/users/{response.Id}", response);
     }
 
     [HttpGet]
@@ -35,5 +35,19 @@ public class UserController(IUserService userService) : ControllerBase{
     {
         UserResponse response = await _userService.WithdrawUserBalanceAsync(id, amount, cancellationToken);
         return Ok(response);
+    }
+
+    [HttpPatch("Disable")]
+    public async Task<IActionResult> DisableUser(Guid id, CancellationToken cancellationToken)
+    {
+        await _userService.DisableUserAsync(id, cancellationToken);
+        return NoContent();
+    }
+    
+    [HttpPatch("Enable")]
+    public async Task<IActionResult> EnableUser(Guid id, CancellationToken cancellationToken)
+    {
+        await _userService.EnableUserAsync(id, cancellationToken);
+        return NoContent();
     }
 }

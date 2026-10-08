@@ -7,44 +7,83 @@ using TradeStream.Domain.Interfaces;
 
 namespace TradeStream.Domain.Services;
 
-public class OrderService(IOrderRepository orderRepository, IAssetService assetService) : IOrderService
+public class OrderService(IOrderRepository orderRepository, IAssetService assetService, IUserService userService) : IOrderService
 {
     private readonly IOrderRepository _orderRepository =  orderRepository;
     private readonly IAssetService _assetService = assetService;
+    private readonly IUserService _userService = userService;
     
-    public async Task<OrderResponse> CreateOrderAsync(OrderRequest order, CancellationToken cancellationToken)
+    public async Task<OrderResponse> CreateOrderAsync(OrderRequest request, CancellationToken cancellationToken)
     {
-        AssetResponse assetResponse = await _assetService.GetAssetByCodeAsync(order.AssetCode, cancellationToken);
+        AssetResponse assetResponse = await _assetService.GetAssetByCodeAsync(request.AssetCode, cancellationToken);
+        if(!assetResponse.IsActive) throw new AssetDisabledException(assetResponse.AssetId, assetResponse.Code);
         
-        Order newOrder = new Order(
+        UserResponse userResponse = await _userService.GetUserAsync(request.UserId, cancellationToken);
+        if(!userResponse.IsActive) throw new UserDisabledException(userResponse.Id);
+        
+        Order order = new Order(
             DateTime.Now,
-            order.AssetCode,
-            assetResponse.Asset.Name,
-            order.UserId,
-            order.TargetValue,
-            order.Quantity,
-            order.OrderType
+            request.AssetCode,
+            assetResponse.Name,
+            request.UserId,
+            request.TargetValue,
+            request.Quantity,
+            request.OrderType
             );
 
-        return new OrderResponse(await _orderRepository.AddOrderAsync(newOrder, cancellationToken));
+        Order newOrder = await _orderRepository.AddOrderAsync(order, cancellationToken);
+        OrderResponse response = new OrderResponse(
+            newOrder.Id,
+            newOrder.OrderDate,
+            newOrder.Status,
+            newOrder.AssetCode,
+            newOrder.AssetName,
+            newOrder.UserId,
+            newOrder.TargetValue,
+            newOrder.Quantity,
+            newOrder.OrderType
+        );
+        return response;
     }
 
     public async Task<OrderResponse> GetOrderAsync(Guid orderId, CancellationToken cancellationToken)
     {
         Order order = await _orderRepository.GetOrderAsync(orderId, cancellationToken) 
                       ?? throw new OrderNotFoundException(orderId);
-        return new OrderResponse(order);
+        
+        OrderResponse response = new OrderResponse(
+            order.Id,
+            order.OrderDate,
+            order.Status,
+            order.AssetCode,
+            order.AssetName,
+            order.UserId,
+            order.TargetValue,
+            order.Quantity,
+            order.OrderType
+        );
+        return response;
     }
 
     public async Task<IEnumerable<OrderResponse>> GetOrdersAsync(int page, int size, CancellationToken cancellationToken)
     {
         IEnumerable<Order> orders = await _orderRepository.GetOrdersAsync(page, size, cancellationToken);
-        return orders.Select(order => new OrderResponse(order));
+        return orders.Select(order => new OrderResponse(
+            order.Id,
+            order.OrderDate,
+            order.Status,
+            order.AssetCode,
+            order.AssetName,
+            order.UserId,
+            order.TargetValue,
+            order.Quantity,
+            order.OrderType
+            ));
     }
 
     public async Task<OrderResponse> CancelOrderAsync(Guid id, CancellationToken cancellationToken)
     {
-        Order? order = await _orderRepository.GetOrderAsync(id, cancellationToken) ??  throw new OrderNotFoundException(id);
+        Order order = await _orderRepository.GetOrderAsync(id, cancellationToken) ??  throw new OrderNotFoundException(id);
         switch (order.Status) {
             case OrderStatus.Cancelled:
                 throw new OrderAlreadyCancelledException(id);
@@ -60,7 +99,18 @@ public class OrderService(IOrderRepository orderRepository, IAssetService assetS
                 break;
         }
 
-        Order? updatedOrder = await _orderRepository.UpdateOrderStatusAsync(order, cancellationToken);
-        return new OrderResponse(updatedOrder);
+        Order updatedOrder = await _orderRepository.UpdateOrderStatusAsync(order, cancellationToken);
+        OrderResponse response = new OrderResponse(
+            updatedOrder.Id,
+            updatedOrder.OrderDate,
+            updatedOrder.Status,
+            updatedOrder.AssetCode,
+            updatedOrder.AssetName,
+            updatedOrder.UserId,
+            updatedOrder.TargetValue,
+            updatedOrder.Quantity,
+            updatedOrder.OrderType
+        );
+        return response;
     }
 }

@@ -21,14 +21,14 @@ public class AssetRepository(TradeDbContext tradeDbContext) : IAssetRepository
         return asset;
     }
 
-    public async Task<Asset?> AddAssetAsync(Asset asset, CancellationToken cancellationToken)
+    public async Task<Asset> AddAssetAsync(Asset asset, CancellationToken cancellationToken)
     {
         _tradeDbContext.Assets.Add(asset);
         await _tradeDbContext.SaveChangesAsync(cancellationToken);
         return asset;
     }
 
-    public async Task<Asset?> UpdateAssetAsync(Asset asset, CancellationToken cancellationToken)
+    public async Task<Asset> UpdateAssetAsync(Asset asset, CancellationToken cancellationToken)
     {
         _tradeDbContext.Assets.Update(asset);
         await _tradeDbContext.SaveChangesAsync(cancellationToken);
@@ -39,5 +39,10 @@ public class AssetRepository(TradeDbContext tradeDbContext) : IAssetRepository
         IEnumerable<Asset> tasks = await _tradeDbContext.Assets
             .Skip((page -1) * size).Take(size).ToListAsync(cancellationToken);
         return tasks;
+    }
+
+    public async Task UpdateAssetActivityStatusAsync(Asset asset, CancellationToken cancellationToken) {
+        _tradeDbContext.Assets.Update(asset);
+        await _tradeDbContext.SaveChangesAsync(cancellationToken);
     }
 }

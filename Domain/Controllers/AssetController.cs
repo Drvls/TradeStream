@@ -25,7 +25,7 @@ public class AssetController(
         if(!validation.IsValid) return BadRequest(validation.Errors);
 
         AssetResponse response = await _assetService.CreateAssetAsync(request, cancellationToken);
-        return Created($"assets/{response.Asset.AssetId}", response);
+        return Created($"assets/{response.AssetId}", response);
     }
     
     [HttpGet("{code}")]
@@ -40,7 +40,7 @@ public class AssetController(
         return assets;
     }
 
-    [HttpPatch]
+    [HttpPatch("Update")]
     public async Task<IActionResult> UpdateAssetCode(Guid id, AssetPatchRequest request, CancellationToken cancellationToken)
     {
         ValidationResult validation = await _patchValidator.ValidateAsync(request, cancellationToken);
@@ -48,5 +48,17 @@ public class AssetController(
         
         AssetResponse response = await _assetService.UpdateAssetAsync(id, request, cancellationToken);
         return Ok(response);
+    }
+
+    [HttpPatch("Disable")]
+    public async Task<IActionResult> DisableAsset(Guid id, CancellationToken cancellationToken) {
+        await _assetService.DisableAssetAsync(id, cancellationToken);
+        return NoContent();
+    }
+
+    [HttpPatch("Enable")]
+    public async Task<IActionResult> EnableAsset(Guid id, CancellationToken cancellationToken){
+        await _assetService.EnableAssetAsync(id, cancellationToken);
+        return NoContent();
     }
 }

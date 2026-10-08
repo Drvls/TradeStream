@@ -82,6 +82,78 @@ public class GlobalHandlerException : IExceptionHandler
                 );
                 break;
             
+            case AssetDisabledException:
+                httpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+                await httpContext.Response.WriteAsJsonAsync(
+                    new ErrorResponse
+                    {
+                        StatusCode = StatusCodes.Status409Conflict,
+                        Error = "Asset is disabled",
+                        Message = exception.Message
+                    }, cancellationToken
+                );
+                break;
+                
+            case UserDisabledException:
+                httpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+                await httpContext.Response.WriteAsJsonAsync(
+                    new ErrorResponse
+                    {
+                        StatusCode = StatusCodes.Status409Conflict,
+                        Error = "User is disabled",
+                        Message = exception.Message
+                    }, cancellationToken
+                );
+                break;
+            
+            case UserAlreadyEnableException:
+                httpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+                await httpContext.Response.WriteAsJsonAsync(
+                    new ErrorResponse
+                    {
+                        StatusCode = StatusCodes.Status409Conflict,
+                        Error = "User is already enabled",
+                        Message = exception.Message
+                    }, cancellationToken
+                    );
+                break;
+            
+            case UserAlreadyDisableException:
+                httpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+                await httpContext.Response.WriteAsJsonAsync(
+                    new ErrorResponse
+                    {
+                        StatusCode = StatusCodes.Status409Conflict,
+                        Error = "User is already disabled",
+                        Message = exception.Message
+                    }, cancellationToken
+                );
+                break;
+            
+            case AssetAlreadyEnableException:
+                httpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+                await httpContext.Response.WriteAsJsonAsync(
+                    new ErrorResponse
+                    {
+                        StatusCode = StatusCodes.Status409Conflict,
+                        Error = "Asset is already enabled",
+                        Message = exception.Message
+                    }, cancellationToken
+                );
+                break;
+            
+            case AssetAlreadyDisableException:
+                httpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+                await httpContext.Response.WriteAsJsonAsync(
+                    new ErrorResponse
+                    {
+                        StatusCode = StatusCodes.Status409Conflict,
+                        Error = "Asset is already disabled",
+                        Message = exception.Message
+                    }, cancellationToken
+                );
+                break;
+            
             default:
                 httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 await httpContext.Response.WriteAsJsonAsync(

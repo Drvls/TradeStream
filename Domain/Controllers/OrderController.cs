@@ -22,7 +22,7 @@ public class OrderController(IOrderService orderService, IValidator<OrderRequest
         if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
             
         OrderResponse response = await _orderService.CreateOrderAsync(request, cancellationToken);
-        return Created($"/users/{response.Order.UserId}/orders/{response.Order.Id}", response);
+        return Created($"/users/{response.UserId}/orders/{response.Id}", response);
     }
 
     [HttpGet("{orderId:guid}")]

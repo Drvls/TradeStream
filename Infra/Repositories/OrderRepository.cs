@@ -1,7 +1,5 @@
-using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using TradeStream.Domain.Entities;
-using TradeStream.Domain.Enum;
 using TradeStream.Domain.Interfaces;
 using TradeStream.Infra.Database;
 
@@ -24,18 +22,17 @@ public class OrderRepository(TradeDbContext tradeDbContext) : IOrderRepository
         return order;
     }
 
-    public async Task<IEnumerable<Order>> GetOrdersAsync(int page, int size, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Order?>> GetOrdersAsync(int page, int size, CancellationToken cancellationToken)
     {
         IEnumerable<Order> orders = await _tradeDbContext.Orders
             .Skip((page - 1) * size).Take(size).ToListAsync(cancellationToken);
         return orders;
     }
 
-    public async Task<Order?> UpdateOrderStatusAsync(Order updatedOrder, CancellationToken cancellationToken)
+    public async Task<Order> UpdateOrderStatusAsync(Order updatedOrder, CancellationToken cancellationToken)
     {
-        Order? order = await _tradeDbContext.Orders.FindAsync(updatedOrder.Id, cancellationToken);
-        order = updatedOrder;
+        _tradeDbContext.Orders.Update(updatedOrder);
         await _tradeDbContext.SaveChangesAsync(cancellationToken);
-        return order;
+        return updatedOrder;
     }
 }

@@ -50,4 +50,13 @@ public class UserController(IUserService userService) : ControllerBase{
         await _userService.EnableUserAsync(id, cancellationToken);
         return NoContent();
     }
+
+    [HttpGet("Positions")]
+    public async Task<IActionResult> GetUserPositionsAsync(
+        Guid userId, int size, int page, CancellationToken cancellationToken)
+    {
+        IEnumerable<PositionResponse> responses =
+            await _userService.GetUserPositionsAsync(userId, size, page, cancellationToken);
+        return Ok(responses);
+    }
 }

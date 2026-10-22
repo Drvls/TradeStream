@@ -7,4 +7,5 @@ public interface IUserRepository {
     Task<User?> GetUserAsync(Guid id, CancellationToken cancellationToken);
     Task<User> UpdateUserBalanceAsync(User user, CancellationToken cancellationToken);
     Task UpdateUserActivityStatusAsync(User user, CancellationToken cancellationToken);
+    Task<IEnumerable<Position>> GetUserPositionsAsync(Guid userId, int size, int page, CancellationToken cancellationToken);
 }

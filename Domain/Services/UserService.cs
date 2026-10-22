@@ -80,4 +80,20 @@ public class UserService(IUserRepository userRepository) : IUserService{
         user.Disable();
         await _userRepository.UpdateUserActivityStatusAsync(user, cancellationToken);
     }
+
+    public async Task<IEnumerable<PositionResponse>> GetUserPositionsAsync(
+        Guid userId, int size, int page, CancellationToken cancellationToken)
+    {
+        User user = await _userRepository.GetUserAsync(userId, cancellationToken) ?? throw new UserNotFoundException(userId);
+        
+        IEnumerable<Position> positions = await _userRepository.GetUserPositionsAsync(userId, size, page, cancellationToken);
+        
+        IEnumerable<PositionResponse> response = positions.Select(position => new PositionResponse(
+            position.Id,
+            position.AssetId,
+            position.Quantity
+            ));
+        
+        return response;
+    }
 }

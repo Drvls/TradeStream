@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using TradeStream.Domain.Entities;
 using TradeStream.Domain.Interfaces;
 using TradeStream.Infra.Database;
@@ -31,5 +32,15 @@ public class UserRepository(TradeDbContext context) : IUserRepository{
     {
         _context.Users.Update(user);
         await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<Position>> GetUserPositionsAsync(Guid userId, int size, int page, CancellationToken cancellationToken)
+    {
+        List<Position> positions = await _context.Positions
+            .Where(x => x.UserId == userId)
+            .Skip((page - 1) * size)
+            .Take(size)
+            .ToListAsync(cancellationToken);
+        return positions;
     }
 }
